@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Custom CSS for Ray Gallery */
+/* Custom CSS for Ray Art Gallery */
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -190,4 +190,102 @@ body {
   .no-print {
     display: none !important;
   }
+}
+
+/* Custom SVG Icon Animations */
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Fill/Unfill Animation */
+@keyframes fillUnfill {
+  0%, 100% {
+    fill: none;
+    fill-opacity: 0;
+  }
+  50% {
+    fill: currentColor;
+    fill-opacity: 0.3;
+  }
+}
+
+.animate-fill-unfill {
+  animation: fillUnfill 2s ease-in-out infinite;
+}
+
+/* Premium Feature Card Animations */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradientRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+/* Heart Wave Animation */
+@keyframes heartWave {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.15);
+  }
+}
+
+.animate-fade-slide-up {
+  animation: fadeSlideUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-gradient-rotate {
+  animation: gradientRotate 3s linear infinite;
+}
+
+.animate-shine {
+  animation: shine 3s ease-in-out infinite;
+}
+
+.animate-heart-wave {
+  animation: heartWave 1.5s ease-in-out infinite;
 }

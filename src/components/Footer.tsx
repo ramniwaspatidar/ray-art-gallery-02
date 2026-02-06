@@ -65,12 +65,7 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/collections"
-                  className="text-gray-300 hover:text-white transition-colors"
-                >
-                  {UI_TEXT.NAV.COLLECTIONS}
-                </Link>
+               
               </li>
               <li>
                 <Link

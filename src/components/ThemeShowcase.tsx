@@ -16,7 +16,7 @@ const ThemeShowcase: React.FC = () => {
     <div className="p-8 space-y-12 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold text-center mb-2 text-gradient-primary">
-          Ray Gallery Theme Showcase
+          Ray Art Gallery Theme Showcase
         </h1>
         <p className="text-center text-gray-600 mb-12">
           Demonstrating the warm color palette: Rose, Pink, and Orange
@@ -409,7 +409,7 @@ const ThemeShowcase: React.FC = () => {
         {/* Footer */}
         <footer className="text-center py-8 border-t border-gray-200">
           <p className="text-gray-600">
-            This showcase demonstrates the complete warm color theme implementation for Ray Gallery.
+            This showcase demonstrates the complete warm color theme implementation for Ray Art Gallery.
           </p>
           <p className="text-sm text-gray-500 mt-2">
             All colors are based on rose-300, pink-300, orange-300, and rose-400 palette.

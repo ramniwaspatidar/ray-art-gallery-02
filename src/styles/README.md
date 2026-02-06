@@ -1,6 +1,6 @@
-# Ray Gallery Theme System
+# Ray Art Gallery Theme System
 
-This document explains how to use the comprehensive theme system implemented for Ray Gallery, featuring a warm color palette based on rose, pink, and orange colors.
+This document explains how to use the comprehensive theme system implemented for Ray Art Gallery, featuring a warm color palette based on rose, pink, and orange colors.
 
 ## 🎨 Color Palette
 
@@ -418,4 +418,4 @@ See the following components for implementation examples:
 | Success | `bg-success-500` | `#f97316` | Success states |
 | Warning | `bg-warning-500` | `#ec4899` | Warning states |
 
-This theme system provides a comprehensive, maintainable, and flexible approach to styling the Ray Gallery application with a cohesive warm color palette.
+This theme system provides a comprehensive, maintainable, and flexible approach to styling the Ray Art Gallery application with a cohesive warm color palette.

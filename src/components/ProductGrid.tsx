@@ -18,7 +18,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
 }) => {
   if (loading) {
     return (
-      <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 ${className}`}>
+      <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ${className}`}>
         {[...Array(8)].map((_, index) => (
           <ProductCardSkeleton key={index} />
         ))}
@@ -57,7 +57,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
   }
 
   return (
-    <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 ${className}`}>
+    <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ${className}`}>
       {products.map((product) => (
         <ProductCard
           key={product.id}

@@ -1,6 +1,6 @@
 // Application Constants
 export const APP_CONSTANTS = {
-  APP_NAME: 'Ray Gallery',
+  APP_NAME: 'Ray Art Gallery',
   APP_DESCRIPTION: 'Beautiful wall decor collection',
   APP_VERSION: '1.0.0',
 } as const;
@@ -10,11 +10,8 @@ export const UI_TEXT = {
   // Navigation
   NAV: {
     HOME: 'Home',
-    COLLECTIONS: 'Collections',
     ABOUT: 'About',
-    CONTACT: 'Contact',
-    CART: 'Cart',
-    SEARCH: 'Search',
+    CONTACT: 'Contact'
   },
   
   // Product Related
@@ -69,7 +66,7 @@ export const UI_TEXT = {
   
   // Footer
   FOOTER: {
-    COPYRIGHT: '© 2024 Ray Gallery. All rights reserved.',
+    COPYRIGHT: '© 2024 Ray Art Gallery. All rights reserved.',
     PRIVACY_POLICY: 'Privacy Policy',
     TERMS_OF_SERVICE: 'Terms of Service',
     CONTACT_US: 'Contact Us',

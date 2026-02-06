@@ -1,4 +1,4 @@
-// Theme configuration for Ray Gallery
+// Theme configuration for Ray Art Gallery
 // Based on the warm color palette: rose-300, pink-300, orange-300, rose-400
 
 export const theme = {

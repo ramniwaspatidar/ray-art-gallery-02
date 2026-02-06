@@ -173,9 +173,6 @@ const ProductDetailsPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Product Not Found</h1>
           <p className="text-gray-600 mb-8">The product you're looking for doesn't exist.</p>
-          <Link href="/collections">
-            <Button>Browse Collections</Button>
-          </Link>
         </div>
         <Footer />
       </div>
@@ -184,22 +181,14 @@ const ProductDetailsPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Top Promotional Banner */}
-      <div className="bg-gradient-to-r from-emerald-700 to-emerald-600 text-white text-center py-3 px-4">
-        <p className="text-sm font-medium">
-          🚚 EXPRESS DELIVERY AND EXTRA 10% OFF ON PRE-PAID ORDERS
-        </p>
-      </div>
-
+    
       <Header />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
         <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-8">
           <Link href="/" className="hover:text-rose-600">Home</Link>
-          <span>/</span>
-          <Link href="/collections" className="hover:text-rose-600">Collections</Link>
-          <span>/</span>
+      
           <span className="text-gray-900">{product.name}</span>
         </nav>
 
