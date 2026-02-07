@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { UI_TEXT, APP_CONSTANTS } from '@/constants';
 import { theme } from '@/styles/theme';
+import CategoryDropdown from './CategoryDropdown';
 
 interface HeaderProps {
   onSearch?: (query: string) => void;
@@ -14,6 +16,7 @@ const Header: React.FC<HeaderProps> = ({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [dropdownTimeout, setDropdownTimeout] = useState<NodeJS.Timeout | null>(null);
 
   // Category data with subcategories
   const categories = [
@@ -21,36 +24,51 @@ const Header: React.FC<HeaderProps> = ({
       name: 'Mandala',
       slug: 'mandala',
       subcategories: [
-        { name: 'Wall Mandala', slug: 'wall-mandala' },
-        { name: 'Table Mandala', slug: 'table-mandala' },
-        { name: 'Hanging Mandala', slug: 'hanging-mandala' },
-        { name: 'Mandala Coasters', slug: 'mandala-coasters' },
-        { name: 'Custom Mandala', slug: 'custom-mandala' },
+        { name: 'Wall Mandala', slug: 'wall-mandala', image: '/hourse.webp' },
+        { name: 'Table Mandala', slug: 'table-mandala', image: '/hourse.webp' },
+        { name: 'Hanging Mandala', slug: 'hanging-mandala', image: '/hourse.webp' },
+        { name: 'Mandala Coasters', slug: 'mandala-coasters', image: '/hourse.webp' },
+        { name: 'Custom Mandala', slug: 'custom-mandala', image: '/hourse.webp' },
       ]
     },
     {
       name: 'Resin',
       slug: 'resin',
       subcategories: [
-        { name: 'Resin Clocks', slug: 'resin-clocks' },
-        { name: 'Resin Trays', slug: 'resin-trays' },
-        { name: 'Resin Coasters', slug: 'resin-coasters' },
-        { name: 'Resin Keychains', slug: 'resin-keychains' },
-        { name: 'Resin Art', slug: 'resin-art' },
+        { name: 'Resin Clocks', slug: 'resin-clocks', image: '/hourse.webp' },
+        { name: 'Resin Trays', slug: 'resin-trays', image: '/hourse.webp' },
+        { name: 'Resin Coasters', slug: 'resin-coasters', image: '/hourse.webp' },
+        { name: 'Resin Keychains', slug: 'resin-keychains', image: '/hourse.webp' },
+        { name: 'Resin Art', slug: 'resin-art', image: '/hourse.webp' },
       ]
     },
     {
       name: 'Lippan',
       slug: 'lippan',
       subcategories: [
-        { name: 'Lippan Wall Art', slug: 'lippan-wall-art' },
-        { name: 'Lippan Mirrors', slug: 'lippan-mirrors' },
-        { name: 'Lippan Clocks', slug: 'lippan-clocks' },
-        { name: 'Lippan Frames', slug: 'lippan-frames' },
-        { name: 'Custom Lippan', slug: 'custom-lippan' },
+        { name: 'Lippan Wall Art', slug: 'lippan-wall-art', image: '/hourse.webp' },
+        { name: 'Lippan Mirrors', slug: 'lippan-mirrors', image: '/hourse.webp' },
+        { name: 'Lippan Clocks', slug: 'lippan-clocks', image: '/hourse.webp' },
+        { name: 'Lippan Frames', slug: 'lippan-frames', image: '/hourse.webp' },
+        { name: 'Custom Lippan', slug: 'custom-lippan', image: '/hourse.webp' },
       ]
     },
   ];
+
+  const handleMouseEnter = (slug: string) => {
+    if (dropdownTimeout) {
+      clearTimeout(dropdownTimeout);
+      setDropdownTimeout(null);
+    }
+    setActiveDropdown(slug);
+  };
+
+  const handleMouseLeave = () => {
+    const timeout = setTimeout(() => {
+      setActiveDropdown(null);
+    }, 200); // 200ms delay before closing
+    setDropdownTimeout(timeout);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -64,8 +82,13 @@ const Header: React.FC<HeaderProps> = ({
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (dropdownTimeout) {
+        clearTimeout(dropdownTimeout);
+      }
+    };
+  }, [dropdownTimeout]);
 
 
   return (
@@ -169,8 +192,8 @@ const Header: React.FC<HeaderProps> = ({
                 <div 
                   key={category.slug}
                   className="relative"
-                  onMouseEnter={() => setActiveDropdown(category.slug)}
-                  onMouseLeave={() => setActiveDropdown(null)}
+                  onMouseEnter={() => handleMouseEnter(category.slug)}
+                  onMouseLeave={handleMouseLeave}
                 >
                   <Link 
                     href={`/collections?category=${category.slug}`}
@@ -182,51 +205,17 @@ const Header: React.FC<HeaderProps> = ({
                     }}
                   >
                     {category.name}
-                    <svg 
-                      className="ml-1 w-4 h-4 transition-transform duration-200" 
-                      style={{ transform: activeDropdown === category.slug ? 'rotate(180deg)' : 'rotate(0deg)' }}
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
+                   
                   </Link>
 
                   {/* Dropdown Menu */}
                   {activeDropdown === category.slug && (
-                    <div 
-                      className="absolute top-full left-0 mt-2 w-56 rounded-lg shadow-xl border animate-fade-slide-up"
-                      style={{ 
-                        backgroundColor: theme.colors.background.primary,
-                        borderColor: theme.colors.border.primary,
-                        zIndex: 50
-                      }}
-                    >
-                      <div className="py-2">
-                        {category.subcategories.map((subcategory) => (
-                          <Link
-                            key={subcategory.slug}
-                            href={`/collections?category=${category.slug}&subcategory=${subcategory.slug}`}
-                            className="block px-4 py-2 text-sm transition-colors duration-150"
-                            style={{ 
-                              color: theme.colors.text.secondary,
-                              fontFamily: theme.typography.fontFamily.sans.join(', ')
-                            }}
-                            onMouseEnter={(e: React.MouseEvent<Element>) => {
-                              (e.currentTarget as HTMLAnchorElement).style.backgroundColor = theme.colors.primary[50];
-                              (e.currentTarget as HTMLAnchorElement).style.color = theme.colors.primary[400];
-                            }}
-                            onMouseLeave={(e: React.MouseEvent<Element>) => {
-                              (e.currentTarget as HTMLAnchorElement).style.backgroundColor = 'transparent';
-                              (e.currentTarget as HTMLAnchorElement).style.color = theme.colors.text.secondary;
-                            }}
-                          >
-                            {subcategory.name}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
+                    <CategoryDropdown
+                      categorySlug={category.slug}
+                      subcategories={category.subcategories}
+                      onMouseEnter={() => handleMouseEnter(category.slug)}
+                      onMouseLeave={handleMouseLeave}
+                    />
                   )}
                 </div>
               ))}

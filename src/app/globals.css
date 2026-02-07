@@ -273,6 +273,18 @@ body {
   }
 }
 
+/* Dropdown Appear Animation */
+@keyframes dropdownAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .animate-fade-slide-up {
   animation: fadeSlideUp 0.6s ease-out forwards;
   opacity: 0;
@@ -288,4 +300,8 @@ body {
 
 .animate-heart-wave {
   animation: heartWave 1.5s ease-in-out infinite;
+}
+
+.animate-dropdown-appear {
+  animation: dropdownAppear 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

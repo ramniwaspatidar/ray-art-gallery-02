@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Product } from '@/types';
 import { UI_TEXT } from '@/constants';
 import Card from './ui/Card';
@@ -17,6 +17,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
   onAddToCart,
   className = '',
 }) => {
+  const router = useRouter();
+
+  const handleNavigation = () => {
+    router.push(`/products/${product.id}`);
+  };
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
@@ -28,18 +34,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0;
 
-  const handleAddToCart = (e?: React.MouseEvent) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    if (onAddToCart) {
-      onAddToCart(product);
-    }
-  };
-
   return (
-    <Link href={`/products/${product.id}`} className={`block ${className}`}>
+    <div onClick={handleNavigation} className={`block cursor-pointer ${className}`}>
       <Card variant="outlined" padding="none" hover className="h-full overflow-hidden">
         {/* Product Image */}
         <div className="relative aspect-square overflow-hidden">
@@ -50,20 +46,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             className="object-cover transition-transform duration-300 hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
-          
-          {/* Sale Badge - VibeCrafts Style */}
-          {/* {discountPercentage > 0 && (
-            <div className="absolute top-3 left-3 bg-rose-400 text-white px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wide shadow-lg">
-              SALE
-            </div>
-          )} */}
-          
-          {/* Featured Badge */}
-          {/* {product.featured && (
-            <div className="absolute top-3 right-3 bg-orange-300 text-white px-2 py-1 rounded-md text-xs font-semibold">
-              Featured
-            </div>
-          )} */}
+    
           
           {/* Out of Stock Overlay */}
           {!product.inStock && (
@@ -98,7 +81,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
         </div>
       </Card>
-    </Link>
+    </div>
   );
 };
 
