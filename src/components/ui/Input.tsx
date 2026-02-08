@@ -3,6 +3,8 @@ import { InputProps } from '@/types';
 
 const Input: React.FC<InputProps> = ({
   type = 'text',
+  id,
+  name,
   placeholder,
   value,
   onChange,
@@ -25,7 +27,7 @@ const Input: React.FC<InputProps> = ({
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) {
-      onChange(e.target.value);
+      onChange(e);
     }
   };
   
@@ -33,6 +35,8 @@ const Input: React.FC<InputProps> = ({
     <div className="w-full">
       <input
         type={type}
+        id={id}
+        name={name}
         placeholder={placeholder}
         value={value}
         onChange={handleChange}

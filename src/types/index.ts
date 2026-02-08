@@ -166,17 +166,19 @@ export interface ButtonProps extends BaseComponentProps {
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   loading?: boolean;
-  onClick?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   type?: 'button' | 'submit' | 'reset';
   onMouseEnter?: (e: React.MouseEvent<Element>) => void;
   onMouseLeave?: (e: React.MouseEvent<Element>) => void;
 }
 
 export interface InputProps extends BaseComponentProps {
-  type?: 'text' | 'email' | 'password' | 'number' | 'search';
+  id?: string;
+  name?: string;
+  type?: 'text' | 'email' | 'password' | 'number' | 'search' | 'tel';
   placeholder?: string;
   value?: string;
-  onChange?: (value: string) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   disabled?: boolean;
   error?: string;
   required?: boolean;

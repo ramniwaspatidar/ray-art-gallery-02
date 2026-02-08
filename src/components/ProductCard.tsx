@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -29,10 +31,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
       currency: 'INR',
     }).format(price);
   };
-
-  const discountPercentage = product.originalPrice
-    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
-    : 0;
 
   return (
     <div onClick={handleNavigation} className={`block cursor-pointer ${className}`}>
@@ -75,8 +73,21 @@ const ProductCard: React.FC<ProductCardProps> = ({
               <span className="text-lg font-bold text-gray-900">
                 {formatPrice(product.price)}
               </span>
-             
             </div>
+            
+            {onAddToCart && (
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onAddToCart(product);
+                }}
+                disabled={!product.inStock}
+              >
+                {UI_TEXT.PRODUCT.ADD_TO_CART}
+              </Button>
+            )}
           </div>
 
         </div>
