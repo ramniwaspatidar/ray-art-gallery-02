@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useMemo } from 'react';
+import toast from 'react-hot-toast';
 import { Product } from '@/types';
 import { APP_CONSTANTS } from '@/constants';
 import { theme } from '@/styles/theme';
@@ -10,11 +11,7 @@ import Footer from '@/components/Footer';
 import ProductGrid from '@/components/ProductGrid';
 import FeatureCard from '@/components/FeatureCard';
 
-/**
- * NOTE:
- * - Keep mock data outside component
- * - Ensure unique IDs
- */
+
 const mockFeaturedProducts: Product[] = [
   {
     id: '1',
@@ -141,7 +138,7 @@ const HomePage: React.FC = () => {
 
   const handleAddToCart = useCallback((product: Product) => {
     console.log('Add to cart:', product);
-    alert(`Added "${product.name}" to cart!`);
+    toast.success(`Added "${product.name}" to cart!`);
   }, []);
 
   return (

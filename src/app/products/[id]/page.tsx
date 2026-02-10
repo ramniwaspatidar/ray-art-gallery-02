@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 import { Product } from '@/types';
 import { APP_CONSTANTS, UI_TEXT } from '@/constants';
@@ -126,14 +127,14 @@ const ProductDetailsPage: React.FC = () => {
     if (!product) return;
 
     console.log('Add to cart:', { product, selectedColor, quantity });
-    alert(`Added "${product.name}" to cart!`);
+    toast.success(`Added "${product.name}" to cart!`);
   }, [product, quantity, selectedColor]);
 
   const handleBuyNow = useCallback(() => {
     if (!product) return;
 
     console.log('Buy now:', { product, selectedColor, quantity });
-    alert(`Proceeding to checkout for "${product.name}"`);
+    toast.success(`Proceeding to checkout for "${product.name}"`);
   }, [product, quantity, selectedColor]);
 
   if (!product) {

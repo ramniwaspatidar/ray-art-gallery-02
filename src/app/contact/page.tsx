@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Button from '@/components/ui/Button';
@@ -28,12 +29,37 @@ const ContactPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    console.log('Form Submitted:', formData);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    alert('Query sent successfully! We will get back to you soon.');
-    setFormData({ name: '', contactNumber: '', email: '', comment: '' });
-    setIsSubmitting(false);
+
+    try {
+      const response = await fetch('http://localhost:3001/api/contact-us', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'accept': '*/*',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          mobile: formData.contactNumber,
+          message: formData.comment,
+        }),
+      });
+
+      if (response.ok) {
+        toast.success('Query sent successfully! We will get back to you soon.');
+        setFormData({ name: '', contactNumber: '', email: '', comment: '' });
+      } else {
+        const errorData = await response.json();
+        toast.error(`Failed to send query: ${errorData.message || 'Something went wrong.'}`);
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast.error('An error occurred. Please try again later.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
