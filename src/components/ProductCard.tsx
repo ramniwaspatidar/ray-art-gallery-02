@@ -25,11 +25,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
     router.push(`/products/${product.id}`);
   };
 
-  const formatPrice = (price: number) => {
+  const formatPrice = (price: string) => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency: 'INR',
-    }).format(price);
+    }).format(parseFloat(price));
   };
 
   return (
@@ -38,22 +38,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
         {/* Product Image */}
         <div className="relative aspect-square overflow-hidden">
           <Image
-            src={'/hourse.webp'}
+            src={product.imageUrl || '/api/placeholder/400/400'}
             alt={product.name}
             fill
             className="object-cover transition-transform duration-300 hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
-    
-          
-          {/* Out of Stock Overlay */}
-          {!product.inStock && (
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-              <span className="text-white font-semibold text-lg">
-                {UI_TEXT.PRODUCT.OUT_OF_STOCK}
-              </span>
-            </div>
-          )}
+
         </div>
 
         {/* Product Info */}
@@ -83,7 +74,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                   e.stopPropagation();
                   onAddToCart(product);
                 }}
-                disabled={!product.inStock}
+                disabled={false}
               >
                 {UI_TEXT.PRODUCT.ADD_TO_CART}
               </Button>

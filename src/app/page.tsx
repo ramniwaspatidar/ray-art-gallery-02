@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Product } from '@/types';
 import { APP_CONSTANTS } from '@/constants';
@@ -11,70 +12,9 @@ import Footer from '@/components/Footer';
 import ProductGrid from '@/components/ProductGrid';
 import FeatureCard from '@/components/FeatureCard';
 
+// Mapper function to convert API product to frontend Product type
+// Product is now compatible with API response directly
 
-const mockFeaturedProducts: Product[] = [
-  {
-    id: '1',
-    name: 'Modern Abstract Wall Art',
-    description: 'Beautiful modern abstract painting perfect for contemporary spaces',
-    price: 2499,
-    originalPrice: 3499,
-    images: ['/api/placeholder/400/400'],
-    category: 'wall-decors',
-    tags: ['modern', 'abstract', 'contemporary'],
-    inStock: true,
-    stockQuantity: 15,
-    rating: 4.5,
-    reviewCount: 23,
-    dimensions: { width: 60, height: 80, unit: 'cm' },
-    material: 'Canvas',
-    color: ['Multicolor'],
-    size: 'Large',
-    featured: true,
-    createdAt: '2024-01-15T00:00:00Z',
-    updatedAt: '2024-01-15T00:00:00Z',
-  },
-  {
-    id: '3',
-    name: 'Minimalist Metal Wall Clock',
-    description: 'Sleek minimalist wall clock with metal finish',
-    price: 899,
-    originalPrice: 1299,
-    images: ['/api/placeholder/400/400'],
-    category: 'clocks',
-    tags: ['minimalist', 'metal', 'modern'],
-    inStock: true,
-    stockQuantity: 25,
-    rating: 4.3,
-    reviewCount: 42,
-    dimensions: { width: 30, height: 30, unit: 'cm' },
-    material: 'Metal',
-    color: ['Black', 'Silver'],
-    size: 'Small',
-    featured: true,
-    createdAt: '2024-01-20T00:00:00Z',
-    updatedAt: '2024-01-20T00:00:00Z',
-  },
-  {
-    id: '10',
-    name: 'Geometric Wall Decal',
-    description: 'Modern geometric pattern wall decal for contemporary spaces',
-    price: 599,
-    images: ['/api/placeholder/400/400'],
-    category: 'wall-decors',
-    tags: ['geometric', 'modern', 'decal'],
-    inStock: true,
-    stockQuantity: 50,
-    rating: 4.2,
-    reviewCount: 67,
-    material: 'Vinyl',
-    color: ['Gold', 'Black'],
-    size: 'Medium',
-    featured: true,
-    createdAt: '2024-01-18T00:00:00Z',
-    updatedAt: '2024-01-18T00:00:00Z',
-  },
-];
 
 const features = [
   {
@@ -134,7 +74,74 @@ const features = [
 ];
 
 const HomePage: React.FC = () => {
-  const featuredProducts = useMemo(() => mockFeaturedProducts, []);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
+  // Ref for infinite scroll observer
+  const observer = useRef<IntersectionObserver | null>(null);
+  const lastProductElementRef = useCallback((node: HTMLDivElement) => {
+    if (loading) return;
+    if (observer.current) observer.current.disconnect();
+    
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore) {
+        setPage(prevPage => prevPage + 1);
+      }
+    });
+    
+    if (node) observer.current.observe(node);
+  }, [loading, hasMore]);
+
+  const fetchProducts = useCallback(async () => {
+    try {
+      setLoading(true);
+      const limit = 10;
+      
+      // Hardcoded params for "Featured APIs" as requested
+      const params = {
+        search: '',
+        category: '',
+        page,
+        limit,
+      };
+
+      const response = await axios.get('http://localhost:3001/api/products', {
+        params,
+      });
+
+      if (response.data.success) {
+        // API now returns products matching our interface
+        const newProducts: Product[] = response.data.data;
+
+        setProducts(prev => {
+           return page === 1 ? newProducts : [...prev, ...newProducts];
+        });
+        
+        const pagination = response.data.pagination;
+        if (pagination) {
+            setHasMore(pagination.hasMore);
+        } else {
+             setHasMore(newProducts.length === limit);
+        }
+
+      } else {
+        toast.error(response.data.message || 'Failed to fetch products');
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      toast.error('Error loading products');
+      setHasMore(false);
+    } finally {
+      setLoading(false);
+    }
+  }, [page]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   const handleAddToCart = useCallback((product: Product) => {
     console.log('Add to cart:', product);
@@ -197,11 +204,35 @@ const HomePage: React.FC = () => {
         <section className="py-16">
           <div className="max-w mx-auto px-4 sm:px-6 lg:px-8">
             <ProductGrid
-              products={featuredProducts}
-              loading={false}
+              products={products}
+              loading={loading && products.length === 0}
               onAddToCart={handleAddToCart}
               className="mb-8"
             />
+            
+            {/* Infinite Scroll Sentinel / Loading Indicator */}
+            {hasMore && (
+              <div 
+                ref={lastProductElementRef} 
+                className="flex justify-center py-8"
+              >
+                  {loading && (
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-rose-600"></div>
+                  )}
+              </div>
+            )}
+
+            {!hasMore && products.length > 0 && (
+                <div className="text-center py-8 text-gray-500">
+                    You have reached the end of the list.
+                </div>
+            )}
+            
+             {!loading && products.length === 0 && (
+                <div className="text-center py-12">
+                    <p className="text-gray-500 text-lg">No products found matching your criteria.</p>
+                </div>
+            )}
           </div>
         </section>
 

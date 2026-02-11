@@ -1,35 +1,20 @@
 // Product Types
 export interface Product {
-  id: string;
+  id: number;
   name: string;
   description: string;
-  price: number;
-  originalPrice?: number;
-  images: string[];
+  price: string;
+  originalPrice: string | null;
+  imageUrl: string | null;
   category: string;
-  subcategory?: string;
-  tags: string[];
-  inStock: boolean;
-  stockQuantity: number;
-  rating: number;
-  reviewCount: number;
-  dimensions?: {
-    width: number;
-    height: number;
-    depth?: number;
-    unit: 'cm' | 'inch';
-  };
-  weight?: {
-    value: number;
-    unit: 'kg' | 'g';
-  };
-  material: string;
-  color: string[];
-  size: string;
-  featured: boolean;
+  subCategory: string;
   createdAt: string;
   updatedAt: string;
 }
+
+// ApiProduct is now same as Product, so we can remove it or alias it if needed,
+// but for now let's just use Product.
+
 
 // Category Types
 export interface Category {
