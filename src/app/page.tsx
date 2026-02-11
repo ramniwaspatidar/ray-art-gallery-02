@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import axios from 'axios';
+import { networkService } from '@/services/NetworkService';
 import toast from 'react-hot-toast';
-import { Product } from '@/types';
+import { Product, ApiResponse, ProductsResponse } from '@/types';
 import { APP_CONSTANTS } from '@/constants';
 import { theme } from '@/styles/theme';
 
@@ -12,7 +12,6 @@ import Footer from '@/components/Footer';
 import ProductGrid from '@/components/ProductGrid';
 import FeatureCard from '@/components/FeatureCard';
 
-// Mapper function to convert API product to frontend Product type
 // Product is now compatible with API response directly
 
 
@@ -107,19 +106,96 @@ const HomePage: React.FC = () => {
         limit,
       };
 
-      const response = await axios.get('http://localhost:3001/api/products', {
-        params,
-      });
+      const response = await networkService.get<ApiResponse<ProductsResponse>>('/products', params);
 
-      if (response.data.success) {
+      if (response.success && response.data) {
         // API now returns products matching our interface
-        const newProducts: Product[] = response.data.data;
+        // The structure seems to be response.data (which is ProductsResponse) -> .products (Product[])
+        // Wait, looking at types again.
+        // ApiResponse<T> { success: boolean; data: T; ... }
+        // ProductsResponse { products: Product[]; pagination: ... }
+        // So response.data is ProductsResponse. response.data.products is the array.
+        
+        // However, in previous code: const newApiProducts: ApiProduct[] = response.data.data;
+        // This implies response.data (axios data) .data (payload) was the array?
+        // Let's assume the previous code was `response.data.data` where `response.data` is `ApiResponse`.
+        // So `ApiResponse.data` was `ApiProduct[]`.
+        // But `ProductsResponse` interface exists.
+        // If the API returns `ApiResponse<Product[]>`, then `response.data` is `Product[]`.
+        
+        // Let's stick to what the previous code implied:
+        // `const newApiProducts: ApiProduct[] = response.data.data;`
+        // `response` was axios response. `response.data` was the body.
+        // `response.data.data` was array of products.
+        // So `ApiResponse<T>` where T is `Product[]`?
+        
+        // But `ProductsResponse` interface exists in `index.ts`.
+        // Let's check `src/types/index.ts` again (step 5).
+        // lines 98-108: `export interface ProductsResponse { products: Product[]; ... }`
+        // But line 91: `export interface ApiResponse<T> { success: boolean; data: T; ... }`
+        
+        // If the backend returns `ProductsResponse` inside `data`:
+        // data: { products: [...], pagination: ... }
+        // Then `response.data` (from NetworkService) is `ApiResponse<ProductsResponse>`.
+        // Then `response.data.data` is `ProductsResponse`.
+        // Then `response.data.data.products` is `Product[]`.
+        
+        // But if the previous code was `response.data.data` and assigned to `ApiProduct[]`, then `data` was just the array.
+        // Let's check the previous code in `page.tsx`:
+        // `const newApiProducts: ApiProduct[] = response.data.data;`
+        // It didn't access `.products`.
+        // So the API returns `{ success: true, data: [ ...products... ], pagination: ... }`?
+        // Or `{ success: true, data: { products: [...], ... } }`?
+        
+        // If `data` is `ApiProduct[]`, then pagination needs to be separate or `data` is `ProductsResponse`.
+        // `const pagination = response.data.pagination;` suggests pagination is sibling to `data` or inside it?
+        // In previous code:
+        // `const newApiProducts: ApiProduct[] = response.data.data;`
+        // `const pagination = response.data.pagination;`
+        // This implies the body is `{ success, data: Product[], pagination: ... }`.
+        
+        // So `ApiResponse` has `data: T`. Here `T` is `Product[]`.
+        // And `ApiResponse` also has `pagination`?
+        // Let's look at `types/index.ts` again.
+        // `export interface ApiResponse<T> { success: boolean; data: T; message?: string; error?: string; }`
+        // It does NOT have pagination.
+        // But `ProductsResponse` has `pagination`.
+        
+        // Maybe `T` is `ProductsResponse`?
+        // `data: { products: [], pagination: ... }`.
+        // Then `response.data.data.products`.
+        
+        // But existing code: `response.data.data` (array). AND `response.data.pagination`.
+        // This implies the standard `ApiResponse` might be extended or `response.data` (axios body) has `pagination` property which is NOT in `ApiResponse` definition or `ApiResponse` definition in file is incomplete/different from actual API.
+        
+        // The user said "change product fields as per below response object".
+        // The user didn't change the outer structure.
+        
+        // Let's assume the API returns:
+        // {
+        //   success: true,
+        //   data: [ prod1, prod2 ... ],
+        //   pagination: { ... }
+        // }
+        // And typescript interface `ApiResponse` might be finding its limit or loosely typed?
+        // Or `response.data` is `any`.
+        
+        // In `NetworkService`: `public async get<T>(...) : Promise<T>`.
+        // So `response` is `T`.
+        // If I say `T = ApiResponse<Product[]> & { pagination: PaginationInfo }`.
+        
+        let newProducts: Product[] = [];
+        if (Array.isArray(response.data)) {
+             newProducts = response.data;
+        } else if ((response.data as any).products) {
+             newProducts = (response.data as any).products;
+        }
 
         setProducts(prev => {
            return page === 1 ? newProducts : [...prev, ...newProducts];
         });
         
-        const pagination = response.data.pagination;
+        const pagination = (response as any).pagination;
         if (pagination) {
             setHasMore(pagination.hasMore);
         } else {
@@ -127,7 +203,7 @@ const HomePage: React.FC = () => {
         }
 
       } else {
-        toast.error(response.data.message || 'Failed to fetch products');
+        toast.error((response as any).message || 'Failed to fetch products');
         setHasMore(false);
       }
     } catch (error) {

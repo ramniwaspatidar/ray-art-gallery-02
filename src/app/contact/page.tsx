@@ -8,6 +8,8 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { theme } from '@/styles/theme';
 
+import { networkService } from '@/services/NetworkService';
+
 const ContactPage = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -31,30 +33,18 @@ const ContactPage = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('http://localhost:3001/api/contact-us', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': '*/*',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          mobile: formData.contactNumber,
-          message: formData.comment,
-        }),
+      await networkService.post('/contact-us', {
+        name: formData.name,
+        email: formData.email,
+        mobile: formData.contactNumber,
+        message: formData.comment,
       });
 
-      if (response.ok) {
-        toast.success('Query sent successfully! We will get back to you soon.');
-        setFormData({ name: '', contactNumber: '', email: '', comment: '' });
-      } else {
-        const errorData = await response.json();
-        toast.error(`Failed to send query: ${errorData.message || 'Something went wrong.'}`);
-      }
-    } catch (error) {
+      toast.success('Query sent successfully! We will get back to you soon.');
+      setFormData({ name: '', contactNumber: '', email: '', comment: '' });
+    } catch (error: any) {
       console.error('Error submitting form:', error);
-      toast.error('An error occurred. Please try again later.');
+      toast.error(error.message || 'Failed to send query.');
     } finally {
       setIsSubmitting(false);
     }
