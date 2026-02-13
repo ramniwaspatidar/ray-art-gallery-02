@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -38,11 +39,13 @@ const AboutPage = () => {
             {/* Our Story Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-24">
                 <div className="relative h-[400px] w-full rounded-2xl overflow-hidden shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
-                     {/* Placeholder image using a gradient for now if no image exists, or a reliable placeholder */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-rose-100 to-orange-100 flex items-center justify-center text-rose-300">
-                        <span className="text-9xl opacity-20">Art</span>
-                    </div>
-                     {/* If user had an image, we would use Image component here. Using a decorative div for now based on theme */}
+                    <Image
+                      src="/header-logo-2.png"
+                      alt={APP_CONSTANTS.APP_NAME}
+                      fill
+                      className="object-contain"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
                 </div>
                 <div>
                     <h2 

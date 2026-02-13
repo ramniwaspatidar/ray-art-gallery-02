@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { networkService } from '@/services/NetworkService';
 import toast from 'react-hot-toast';
 import { Product, ApiResponse, ProductsResponse } from '@/types';
-import { APP_CONSTANTS } from '@/constants';
+import { APP_CONSTANTS, UI_TEXT } from '@/constants';
 import { theme } from '@/styles/theme';
 
 import Header from '@/components/Header';
@@ -18,8 +19,8 @@ import FeatureCard from '@/components/FeatureCard';
 const features = [
   {
     id: 'premium-quality',
-    title: 'Premium Quality',
-    description: 'Hand-picked items made from the finest materials to ensure lasting beauty and durability.',
+    title: UI_TEXT.FEATURES.PREMIUM_QUALITY_TITLE,
+    description: UI_TEXT.FEATURES.PREMIUM_QUALITY_DESC,
     gradient: 'linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 50%, #FFD700 100%)',
     iconBgColor: 'linear-gradient(135deg, #FFB6C1, #FFC0CB)',
     iconColor: '#FF69B4',
@@ -36,8 +37,8 @@ const features = [
   },
   {
     id: 'fast-delivery',
-    title: 'Fast Delivery',
-    description: 'Quick and secure shipping to get your beautiful wall decor items to you as soon as possible.',
+    title: UI_TEXT.FEATURES.FAST_DELIVERY_TITLE,
+    description: UI_TEXT.FEATURES.FAST_DELIVERY_DESC,
     gradient: 'linear-gradient(135deg, #FFDAB9 0%, #FFE4B5 50%, #FFD700 100%)',
     iconBgColor: 'linear-gradient(135deg, #FFDAB9, #FFE4B5)',
     iconColor: '#FF8C00',
@@ -54,8 +55,8 @@ const features = [
   },
   {
     id: 'customer-satisfaction',
-    title: 'Customer Satisfaction',
-    description: '100% satisfaction guarantee with easy returns and dedicated customer support.',
+    title: UI_TEXT.FEATURES.CUSTOMER_SATISFACTION_TITLE,
+    description: UI_TEXT.FEATURES.CUSTOMER_SATISFACTION_DESC,
     gradient: 'linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%)',
     iconBgColor: 'linear-gradient(135deg, #FFD700, #FFA500)',
     iconColor: '#FF6347',
@@ -72,7 +73,12 @@ const features = [
   },
 ];
 
-const HomePage: React.FC = () => {
+const HomePageContent: React.FC = () => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const categoryFilter = searchParams.get('category') || '';
+  const subCategoryFilter = searchParams.get('subCategory') || '';
+
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -98,13 +104,18 @@ const HomePage: React.FC = () => {
       setLoading(true);
       const limit = 10;
       
-      // Hardcoded params for "Featured APIs" as requested
-      const params = {
-        search: '',
-        category: '',
+      const params: Record<string, any> = {
         page,
         limit,
       };
+
+      // Add category/subcategory filters from URL params
+      if (categoryFilter) {
+        params.category = categoryFilter;
+      }
+      if (subCategoryFilter) {
+        params.subCategory = subCategoryFilter;
+      }
 
       const response = await networkService.get<ApiResponse<ProductsResponse>>('/products', params);
 
@@ -203,17 +214,34 @@ const HomePage: React.FC = () => {
         }
 
       } else {
-        toast.error((response as any).message || 'Failed to fetch products');
+        toast.error((response as any).message || UI_TEXT.PRODUCT_LIST.FETCH_FAILED);
         setHasMore(false);
       }
     } catch (error) {
       console.error('Error fetching products:', error);
-      toast.error('Error loading products');
+      toast.error(UI_TEXT.PRODUCT_LIST.ERROR_LOADING);
       setHasMore(false);
     } finally {
       setLoading(false);
     }
-  }, [page]);
+  }, [page, categoryFilter, subCategoryFilter]);
+
+  // Reset products and page when filters change
+  useEffect(() => {
+    setProducts([]);
+    setPage(1);
+    setHasMore(true);
+
+    // Scroll to products section when a filter is applied
+    if (categoryFilter || subCategoryFilter) {
+      setTimeout(() => {
+        const productsSection = document.getElementById('products-section');
+        if (productsSection) {
+          productsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  }, [categoryFilter, subCategoryFilter]);
 
   useEffect(() => {
     fetchProducts();
@@ -245,10 +273,10 @@ const HomePage: React.FC = () => {
                 style={{ fontFamily: theme.typography.fontFamily.serif.join(', ') }}
               >
                 <span className="font-serif italic flex justify-start mb-5" style={{ color: theme.colors.primary[300] }}>
-                  Love
+                  {UI_TEXT.HERO.TITLE_LINE1}
                 </span>
                 <span className="block font-serif" style={{ color: theme.colors.accent[300] }}>
-                  Lives Here
+                  {UI_TEXT.HERO.TITLE_LINE2}
                 </span>
               </h1>
 
@@ -269,16 +297,68 @@ const HomePage: React.FC = () => {
                   fontFamily: theme.typography.fontFamily.sans.join(', '),
                 }}
               >
-                Transform your space with our handmade Mandala, Resin and Mirror art collection. Discover wall clocks,
-                keychains and MDF décor that reflect your unique style.
+                {UI_TEXT.HERO.DESCRIPTION}
               </p>
             </div>
           </div>
         </section>
 
         {/* Featured Products */}
-        <section className="py-16">
+        <section id="products-section" className="py-8">
           <div className="max-w mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Active Filter Chips */}
+            {(categoryFilter || subCategoryFilter) && (
+              <div className="flex flex-wrap items-center gap-2 mb-6">
+                <span className="text-sm font-medium text-gray-500 mr-1">{UI_TEXT.FILTER.LABEL}</span>
+
+                {categoryFilter && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium bg-rose-50 text-rose-700 border border-rose-200 transition-all hover:bg-rose-100">
+                    {categoryFilter}
+                    <button
+                      onClick={() => {
+                        const params = new URLSearchParams(searchParams.toString());
+                        params.delete('category');
+                        params.delete('subCategory');
+                        router.push(params.toString() ? `/?${params.toString()}` : '/');
+                      }}
+                      className="ml-0.5 rounded-full p-0.5 hover:bg-rose-200 transition-colors"
+                      aria-label={`Remove ${categoryFilter} filter`}
+                    >
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </span>
+                )}
+
+                {subCategoryFilter && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium bg-amber-50 text-amber-700 border border-amber-200 transition-all hover:bg-amber-100">
+                    {subCategoryFilter}
+                    <button
+                      onClick={() => {
+                        const params = new URLSearchParams(searchParams.toString());
+                        params.delete('subCategory');
+                        router.push(params.toString() ? `/?${params.toString()}` : '/');
+                      }}
+                      className="ml-0.5 rounded-full p-0.5 hover:bg-amber-200 transition-colors"
+                      aria-label={`Remove ${subCategoryFilter} filter`}
+                    >
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </span>
+                )}
+
+                <button
+                  onClick={() => router.push('/')}
+                  className="text-xs text-gray-400 hover:text-rose-500 underline underline-offset-2 transition-colors ml-1"
+                >
+                  {UI_TEXT.FILTER.CLEAR_ALL}
+                </button>
+              </div>
+            )}
+
             <ProductGrid
               products={products}
               loading={loading && products.length === 0}
@@ -300,13 +380,13 @@ const HomePage: React.FC = () => {
 
             {!hasMore && products.length > 0 && (
                 <div className="text-center py-8 text-gray-500">
-                    You have reached the end of the list.
+                    {UI_TEXT.PRODUCT_LIST.END_OF_LIST}
                 </div>
             )}
             
              {!loading && products.length === 0 && (
                 <div className="text-center py-12">
-                    <p className="text-gray-500 text-lg">No products found matching your criteria.</p>
+                    <p className="text-gray-500 text-lg">{UI_TEXT.PRODUCT_LIST.NO_PRODUCTS}</p>
                 </div>
             )}
           </div>
@@ -328,7 +408,7 @@ const HomePage: React.FC = () => {
                   fontFamily: theme.typography.fontFamily.serif.join(', '),
                 }}
               >
-                Why Choose {APP_CONSTANTS.APP_NAME}?
+                Why Choose {APP_CONSTANTS.APP_NAME}{UI_TEXT.FEATURES.SECTION_TITLE_SUFFIX}
               </h2>
 
               <p
@@ -338,7 +418,7 @@ const HomePage: React.FC = () => {
                   fontFamily: theme.typography.fontFamily.sans.join(', '),
                 }}
               >
-                We offer the finest collection of handmade wall decor items with exceptional quality and service.
+                {UI_TEXT.FEATURES.SECTION_SUBTITLE}
               </p>
             </div>
 
@@ -362,5 +442,15 @@ const HomePage: React.FC = () => {
     </div>
   );
 };
+
+const HomePage: React.FC = () => (
+  <Suspense fallback={
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-rose-500"></div>
+    </div>
+  }>
+    <HomePageContent />
+  </Suspense>
+);
 
 export default HomePage;

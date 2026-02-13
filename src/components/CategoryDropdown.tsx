@@ -10,6 +10,7 @@ interface Subcategory {
 
 interface CategoryDropdownProps {
   categorySlug: string;
+  categoryName: string;
   subcategories: Subcategory[];
   onMouseEnter: () => void;
   onMouseLeave: () => void;
@@ -17,6 +18,7 @@ interface CategoryDropdownProps {
 
 const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   categorySlug,
+  categoryName,
   subcategories,
   onMouseEnter,
   onMouseLeave,
@@ -42,7 +44,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
             {subcategories.map((subcategory) => (
               <Link
                 key={subcategory.slug}
-                href={`/collections?category=${categorySlug}&subcategory=${subcategory.slug}`}
+                href={`/?category=${encodeURIComponent(categoryName)}&subCategory=${encodeURIComponent(subcategory.name)}`}
                 className="group flex flex-col items-center text-center"
               >
                 {/* Image Container */}

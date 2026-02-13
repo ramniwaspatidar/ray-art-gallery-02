@@ -100,32 +100,25 @@ const Header: React.FC<HeaderProps> = ({
       }}
     >
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center h-16">
+        <div className="relative flex items-center justify-between md:justify-start h-16">
           {/* Logo */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 md:order-first">
             <Link href="/" className="flex items-center">
-              <div 
-                className="h-8 w-8 rounded-lg flex items-center justify-center"
-                style={{ backgroundColor: theme.components.header.logo }}
-              >
-                <span 
-                  className="font-bold text-lg"
-                  style={{ 
-                    color: theme.colors.text.inverse,
-                    fontFamily: theme.typography.fontFamily.sans.join(', ')
-                  }}
-                >
-                  R
-                </span>
-              </div>
+              <Image
+                src="/logo-2.png"
+                alt={APP_CONSTANTS.APP_NAME}
+                width={40}
+                height={40}
+                className="h-10 w-10 rounded-lg object-contain"
+              />
               <span 
-                className="ml-2 text-xl font-bold"
+                className="text-xl font-bold"
                 style={{ 
                   color: theme.colors.text.primary,
                   fontFamily: theme.typography.fontFamily.sans.join(', ')
                 }}
               >
-                {APP_CONSTANTS.APP_NAME}
+                {APP_CONSTANTS.APP_NAME_SORT}
               </span>
             </Link>
           </div>
@@ -196,7 +189,7 @@ const Header: React.FC<HeaderProps> = ({
                   onMouseLeave={handleMouseLeave}
                 >
                   <Link 
-                    href={`/collections?category=${category.slug}`}
+                    href={`/?category=${encodeURIComponent(category.name)}`}
                     className="transition-colors duration-200 py-2 px-3 rounded-lg text-sm font-medium inline-flex items-center"
                     style={{ 
                       color: activeDropdown === category.slug ? theme.colors.primary[400] : theme.colors.text.secondary,
@@ -212,6 +205,7 @@ const Header: React.FC<HeaderProps> = ({
                   {activeDropdown === category.slug && (
                     <CategoryDropdown
                       categorySlug={category.slug}
+                      categoryName={category.name}
                       subcategories={category.subcategories}
                       onMouseEnter={() => handleMouseEnter(category.slug)}
                       onMouseLeave={handleMouseLeave}
@@ -223,7 +217,7 @@ const Header: React.FC<HeaderProps> = ({
           )}
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden order-first">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-inset"
@@ -334,7 +328,7 @@ const Header: React.FC<HeaderProps> = ({
                   {categories.map((category) => (
                     <div key={category.slug}>
                       <Link 
-                        href={`/collections?category=${category.slug}`}
+                        href={`/?category=${encodeURIComponent(category.name)}`}
                         className="block px-3 py-2 text-base font-medium rounded-md"
                         style={{ 
                           color: theme.colors.text.primary,
@@ -349,7 +343,7 @@ const Header: React.FC<HeaderProps> = ({
                         {category.subcategories.map((subcategory) => (
                           <Link
                             key={subcategory.slug}
-                            href={`/collections?category=${category.slug}&subcategory=${subcategory.slug}`}
+                            href={`/?category=${encodeURIComponent(category.name)}&subCategory=${encodeURIComponent(subcategory.name)}`}
                             className="block px-3 py-1.5 text-sm rounded-md"
                             style={{ 
                               color: theme.colors.text.secondary,
