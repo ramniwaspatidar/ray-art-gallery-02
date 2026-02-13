@@ -57,10 +57,10 @@ const ContactPage = () => {
 
       <main className="flex-grow relative overflow-hidden">
         {/* Background Blobs (Similar to Home Page) */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 bg-orange-50/30">
-             <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-rose-200/40 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-pulse" />
-             <div className="absolute top-[20%] right-[-10%] w-[600px] h-[600px] bg-orange-200/40 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-pulse" style={{ animationDelay: '1s' }} />
-             <div className="absolute bottom-[-10%] left-[20%] w-[500px] h-[500px] bg-pink-200/40 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 bg-teal-50/30">
+             <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-teal-200/40 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-pulse" />
+             <div className="absolute top-[20%] right-[-10%] w-[600px] h-[600px] bg-amber-200/40 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-pulse" style={{ animationDelay: '1s' }} />
+             <div className="absolute bottom-[-10%] left-[20%] w-[500px] h-[500px] bg-cyan-200/40 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-pulse" style={{ animationDelay: '2s' }} />
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
@@ -71,7 +71,7 @@ const ContactPage = () => {
                 {/* Left Side: Artistic/Info */}
                 <div 
                     className="md:w-5/12 p-10 md:p-14 text-white flex flex-col justify-between relative"
-                    style={{ background: 'linear-gradient(135deg, #f472b6 0%, #fb923c 100%)' }}
+                    style={{ background: 'linear-gradient(135deg, #5BA8A0 0%, #2D3E5F 100%)' }}
                 >
                     {/* Decorative Pattern Overlay */}
                     <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '30px 30px' }}></div>
@@ -176,7 +176,7 @@ const ContactPage = () => {
                                 placeholder="Tell us about your requirements..."
                                 value={formData.comment}
                                 onChange={handleChange}
-                                className="block w-full rounded-lg border-gray-200 bg-gray-50 focus:bg-white shadow-sm focus:border-rose-300 focus:ring focus:ring-rose-200 focus:ring-opacity-50 sm:text-sm p-4 transition-all text-gray-900"
+                                className="block w-full rounded-lg border-gray-200 bg-gray-50 focus:bg-white shadow-sm focus:border-teal-300 focus:ring focus:ring-teal-200 focus:ring-opacity-50 sm:text-sm p-4 transition-all text-gray-900"
                             />
                         </div>
 
@@ -186,7 +186,7 @@ const ContactPage = () => {
                                 variant="primary"
                                 size="lg"
                                 loading={isSubmitting}
-                                className="w-full md:w-auto min-w-[200px] shadow-lg hover:shadow-rose-300/50"
+                                className="w-full md:w-auto min-w-[200px] shadow-lg hover:shadow-teal-300/50"
                             >
                                 Send Message
                             </Button>

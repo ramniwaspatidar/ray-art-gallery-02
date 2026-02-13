@@ -77,7 +77,7 @@ const ProductDetailsPage: React.FC = () => {
       <div className="min-h-screen bg-white">
         <Header />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex justify-center items-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-rose-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-500"></div>
         </div>
         <Footer />
       </div>
@@ -95,7 +95,7 @@ const ProductDetailsPage: React.FC = () => {
           <p className="text-gray-600 mb-8">{error}</p>
           <Link
             href="/"
-            className="text-rose-600 font-semibold hover:underline"
+            className="text-teal-600 font-semibold hover:underline"
           >
             {UI_TEXT.PRODUCT_DETAILS.GO_BACK_HOME}
           </Link>
@@ -118,7 +118,7 @@ const ProductDetailsPage: React.FC = () => {
           </p>
           <Link
             href="/"
-            className="text-rose-600 font-semibold hover:underline"
+            className="text-teal-600 font-semibold hover:underline"
           >
             {UI_TEXT.PRODUCT_DETAILS.GO_BACK_HOME}
           </Link>
@@ -147,7 +147,7 @@ const ProductDetailsPage: React.FC = () => {
               />
 
               {discountPercentage > 0 && (
-                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 bg-rose-400 text-white px-2.5 py-1 rounded-md text-xs sm:text-sm font-bold uppercase tracking-wide shadow-lg">
+                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 bg-teal-500 text-white px-2.5 py-1 rounded-md text-xs sm:text-sm font-bold uppercase tracking-wide shadow-lg">
                   {UI_TEXT.PRODUCT_DETAILS.SALE}
                 </div>
               )}
@@ -184,7 +184,7 @@ const ProductDetailsPage: React.FC = () => {
                     <span className="text-lg sm:text-xl text-gray-500 line-through">
                       {formatPrice(product.originalPrice)}
                     </span>
-                    <span className="bg-rose-100 text-rose-800 px-2 py-1 rounded-md text-xs sm:text-sm font-semibold">
+                    <span className="bg-teal-100 text-teal-800 px-2 py-1 rounded-md text-xs sm:text-sm font-semibold">
                       Save {discountPercentage}%
                     </span>
                   </>

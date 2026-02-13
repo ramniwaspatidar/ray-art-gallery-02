@@ -21,9 +21,9 @@ const features = [
     id: 'premium-quality',
     title: UI_TEXT.FEATURES.PREMIUM_QUALITY_TITLE,
     description: UI_TEXT.FEATURES.PREMIUM_QUALITY_DESC,
-    gradient: 'linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 50%, #FFD700 100%)',
-    iconBgColor: 'linear-gradient(135deg, #FFB6C1, #FFC0CB)',
-    iconColor: '#FF69B4',
+    gradient: 'linear-gradient(135deg, #7bccc0 0%, #5BA8A0 50%, #2D3E5F 100%)',
+    iconBgColor: 'linear-gradient(135deg, #d4f0eb, #a8e1d7)',
+    iconColor: '#5BA8A0',
     icon: (
       <svg className="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
@@ -39,9 +39,9 @@ const features = [
     id: 'fast-delivery',
     title: UI_TEXT.FEATURES.FAST_DELIVERY_TITLE,
     description: UI_TEXT.FEATURES.FAST_DELIVERY_DESC,
-    gradient: 'linear-gradient(135deg, #FFDAB9 0%, #FFE4B5 50%, #FFD700 100%)',
-    iconBgColor: 'linear-gradient(135deg, #FFDAB9, #FFE4B5)',
-    iconColor: '#FF8C00',
+    gradient: 'linear-gradient(135deg, #C9A74C 0%, #E0BD5E 50%, #f9ecc8 100%)',
+    iconBgColor: 'linear-gradient(135deg, #f9ecc8, #f3d991)',
+    iconColor: '#C9A74C',
     icon: (
       <svg className="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
@@ -57,9 +57,9 @@ const features = [
     id: 'customer-satisfaction',
     title: UI_TEXT.FEATURES.CUSTOMER_SATISFACTION_TITLE,
     description: UI_TEXT.FEATURES.CUSTOMER_SATISFACTION_DESC,
-    gradient: 'linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%)',
-    iconBgColor: 'linear-gradient(135deg, #FFD700, #FFA500)',
-    iconColor: '#FF6347',
+    gradient: 'linear-gradient(135deg, #2D3E5F 0%, #5B6BA3 50%, #8490ba 100%)',
+    iconBgColor: 'linear-gradient(135deg, #d6dae8, #adb5d1)',
+    iconColor: '#2D3E5F',
     icon: (
       <svg className="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
@@ -312,7 +312,7 @@ const HomePageContent: React.FC = () => {
                 <span className="text-sm font-medium text-gray-500 mr-1">{UI_TEXT.FILTER.LABEL}</span>
 
                 {categoryFilter && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium bg-rose-50 text-rose-700 border border-rose-200 transition-all hover:bg-rose-100">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium bg-teal-50 text-teal-700 border border-teal-200 transition-all hover:bg-teal-100">
                     {categoryFilter}
                     <button
                       onClick={() => {
@@ -321,7 +321,7 @@ const HomePageContent: React.FC = () => {
                         params.delete('subCategory');
                         router.push(params.toString() ? `/?${params.toString()}` : '/');
                       }}
-                      className="ml-0.5 rounded-full p-0.5 hover:bg-rose-200 transition-colors"
+                      className="ml-0.5 rounded-full p-0.5 hover:bg-teal-200 transition-colors"
                       aria-label={`Remove ${categoryFilter} filter`}
                     >
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -352,7 +352,7 @@ const HomePageContent: React.FC = () => {
 
                 <button
                   onClick={() => router.push('/')}
-                  className="text-xs text-gray-400 hover:text-rose-500 underline underline-offset-2 transition-colors ml-1"
+                  className="text-xs text-gray-400 hover:text-teal-600 underline underline-offset-2 transition-colors ml-1"
                 >
                   {UI_TEXT.FILTER.CLEAR_ALL}
                 </button>
@@ -373,7 +373,7 @@ const HomePageContent: React.FC = () => {
                 className="flex justify-center py-8"
               >
                   {loading && (
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-rose-600"></div>
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
                   )}
               </div>
             )}
@@ -395,20 +395,26 @@ const HomePageContent: React.FC = () => {
         {/* Features */}
         <section className="relative py-20 overflow-hidden" style={{ backgroundColor: '#FAFAFA' }}>
           {/* Blurred background blobs */}
-          <div className="absolute top-10 left-10 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
+          <div className="absolute top-10 left-10 w-72 h-72 bg-teal-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
           <div className="absolute top-20 right-20 w-96 h-96 bg-peach-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{ animationDelay: '1s', backgroundColor: '#FFDAB9' }} />
           <div className="absolute bottom-10 left-1/3 w-80 h-80 bg-yellow-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{ animationDelay: '2s' }} />
           
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2
-                className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent"
+                className="text-4xl md:text-5xl font-bold mb-6 text-gray-900"
                 style={{
-                  backgroundImage: 'linear-gradient(135deg, #FF69B4 0%, #FFD700 100%)',
                   fontFamily: theme.typography.fontFamily.serif.join(', '),
                 }}
               >
-                Why Choose {APP_CONSTANTS.APP_NAME}{UI_TEXT.FEATURES.SECTION_TITLE_SUFFIX}
+                Why Choose{' '}
+                <span
+                  className="bg-clip-text text-transparent"
+                  style={{ backgroundImage: 'linear-gradient(135deg, #5BA8A0 0%, #2D3E5F 100%)' }}
+                >
+                  {APP_CONSTANTS.APP_NAME}
+                </span>
+                {UI_TEXT.FEATURES.SECTION_TITLE_SUFFIX}
               </h2>
 
               <p
@@ -446,7 +452,7 @@ const HomePageContent: React.FC = () => {
 const HomePage: React.FC = () => (
   <Suspense fallback={
     <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-rose-500"></div>
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-500"></div>
     </div>
   }>
     <HomePageContent />
