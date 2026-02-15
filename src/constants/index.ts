@@ -68,7 +68,7 @@ export const UI_TEXT = {
   
   // Footer
   FOOTER: {
-    COPYRIGHT: '© 2024 Ray Art Gallery. All rights reserved.',
+    COPYRIGHT: '© 2026 Ray Art Gallery. All rights reserved.',
     PRIVACY_POLICY: 'Privacy Policy',
     TERMS_OF_SERVICE: 'Terms of Service',
     CONTACT_US: 'Contact Us',

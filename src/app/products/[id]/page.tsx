@@ -146,11 +146,11 @@ const ProductDetailsPage: React.FC = () => {
                 priority
               />
 
-              {discountPercentage > 0 && (
+              {/* {discountPercentage > 0 && (
                 <div className="absolute top-3 left-3 sm:top-4 sm:left-4 bg-teal-500 text-white px-2.5 py-1 rounded-md text-xs sm:text-sm font-bold uppercase tracking-wide shadow-lg">
                   {UI_TEXT.PRODUCT_DETAILS.SALE}
                 </div>
-              )}
+              )} */}
             </div>
 
             {/* Description Below Image - visible on desktop only */}
@@ -194,7 +194,7 @@ const ProductDetailsPage: React.FC = () => {
 
             {/* Actions */}
             <div className="flex flex-col gap-3 sm:gap-4">
-              <Button
+              {/* <Button
                 variant="primary"
                 size="lg"
                 onClick={handleAddToCart}
@@ -202,7 +202,7 @@ const ProductDetailsPage: React.FC = () => {
                 className="w-full"
               >
                 {UI_TEXT.PRODUCT.ADD_TO_CART}
-              </Button>
+              </Button> */}
 
               {/* Order on WhatsApp Button */}
               <a

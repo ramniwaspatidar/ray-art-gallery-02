@@ -96,7 +96,7 @@ const ContactPage = () => {
                             </div>
                             <div>
                                 <h3 className="text-base font-semibold">Email Us</h3>
-                                <p className="text-sm text-white/80">contact@rayartgallery.com</p>
+                                <p className="text-sm text-white/80">rayartgallery24@gmail.com</p>
                             </div>
                         </div>
 
@@ -106,7 +106,7 @@ const ContactPage = () => {
                             </div>
                             <div>
                                 <h3 className="text-base font-semibold">Call Us</h3>
-                                <p className="text-sm text-white/80">+91 98765 43210</p>
+                                <p className="text-sm text-white/80">+91 9319848309</p>
                             </div>
                         </div>
 

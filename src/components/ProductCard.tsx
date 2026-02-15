@@ -66,7 +66,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               </span>
             </div>
             
-            {onAddToCart && (
+            {/* {onAddToCart && (
               <Button
                 variant="primary"
                 size="sm"
@@ -78,7 +78,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               >
                 {UI_TEXT.PRODUCT.ADD_TO_CART}
               </Button>
-            )}
+            )} */}
           </div>
 
         </div>

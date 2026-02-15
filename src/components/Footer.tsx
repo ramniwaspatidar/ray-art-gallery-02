@@ -3,6 +3,55 @@ import Link from 'next/link';
 import { UI_TEXT, APP_CONSTANTS } from '@/constants';
 
 const Footer: React.FC = () => {
+  const [email, setEmail] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const handleSubscribe = async () => {
+    if (!email) {
+      const toastPromise = import('react-hot-toast').then(({ default: toast }) => {
+        toast.error('Please enter your email address');
+      });
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      import('react-hot-toast').then(({ default: toast }) => {
+        toast.error('Please enter a valid email address');
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const { networkService } = await import('@/services/NetworkService');
+      
+      await networkService.post('/admin/newsletter', {
+        email: email
+      });
+
+      import('react-hot-toast').then(({ default: toast }) => {
+        toast.success('Successfully subscribed to newsletter!');
+      });
+      setEmail('');
+    } catch (error: any) {
+      console.error('Newsletter subscription error:', error);
+      import('react-hot-toast').then(({ default: toast }) => {
+        const errorMessage = error.response?.data?.message || 'Failed to subscribe. Please try again.';
+        toast.error(errorMessage);
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSubscribe();
+    }
+  };
+
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -100,7 +149,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-3">
               <li>
                 <a
-                  href="https://instagram.com/YOUR_PROFILE"
+                  href="https://www.instagram.com/ray_art_gallery309"
                   className="text-gray-400 hover:text-teal-400 transition-colors flex items-center text-sm"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -129,10 +178,25 @@ const Footer: React.FC = () => {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 sm:w-64 px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-white placeholder-gray-500 text-sm"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onKeyDown={handleKeyDown}
+                disabled={isLoading}
+                className="flex-1 sm:w-64 px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-white placeholder-gray-500 text-sm disabled:opacity-50"
               />
-              <button className="px-5 py-2.5 bg-teal-500 text-white rounded-r-lg hover:bg-teal-600 transition-colors text-sm font-medium whitespace-nowrap">
-                Subscribe
+              <button
+                onClick={handleSubscribe}
+                disabled={isLoading}
+                className="px-5 py-2.5 bg-teal-500 text-white rounded-r-lg hover:bg-teal-600 transition-colors text-sm font-medium whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center min-w-[100px]"
+              >
+                {isLoading ? (
+                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                ) : (
+                  'Subscribe'
+                )}
               </button>
             </div>
           </div>
@@ -148,5 +212,6 @@ const Footer: React.FC = () => {
     </footer>
   );
 };
+
 
 export default Footer;

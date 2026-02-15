@@ -377,9 +377,9 @@ const ThemeShowcase: React.FC = () => {
                     <span className="text-lg font-bold text-primary-400">$99</span>
                     <span className="text-sm text-gray-500 line-through ml-2">$149</span>
                   </div>
-                  <ThemedButton variant="primary" size="sm">
+                  {/* <ThemedButton variant="primary" size="sm">
                     Add to Cart
-                  </ThemedButton>
+                  </ThemedButton> */}
                 </div>
               </div>
             </div>
