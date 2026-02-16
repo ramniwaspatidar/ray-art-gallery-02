@@ -3,11 +3,12 @@ export interface Product {
   id: number;
   name: string;
   description: string;
-  price: string;
-  originalPrice: string | null;
+  price: string | number;
+  originalPrice: string | number | null;
   imageUrl: string | null;
   category: string;
   subCategory: string;
+  features?: string[];
   createdAt: string;
   updatedAt: string;
 }

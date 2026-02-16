@@ -242,7 +242,7 @@ const ProductDetailsPage: React.FC = () => {
               </div>
               
               <ul className="space-y-2.5 sm:space-y-3 text-gray-700 text-sm">
-                {UI_TEXT.PRODUCT_DETAILS.FEATURE_DETAILS_LIST.map((item, index) => (
+                {(product.features && product.features.length > 0 ? product.features : UI_TEXT.PRODUCT_DETAILS.FEATURE_DETAILS_LIST).map((item, index) => (
                   <li key={index} className="flex items-start">
                     <span className="mr-2 mt-0.5 shrink-0">•</span>
                     <span>{item}</span>

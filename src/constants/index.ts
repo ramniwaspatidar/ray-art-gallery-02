@@ -119,15 +119,7 @@ export const UI_TEXT = {
     FEATURE_AND_DETAILS: 'Feature And Details',
     ORDER_ON_WHATSAPP: 'Order on WhatsApp',
     WHATSAPP_MESSAGE: "I'm interested in this product",
-    FEATURE_DETAILS_LIST: [
-      'Size : Please Refer Image for Dimensions.',
-      'The elegant Wood Wall Shelf can also be gifted to your loved ones, gift for your relative and friends.',
-      'Wall Shelf will create a special ambience for you, an ideal Shelf decoration sign for hanging on the wall of your bedroom, club, restaurant, Outlet, ceiling lights, bistro, Waterfall, dance hall, baby room, and bedroom.',
-      'Easy to Clean, CARE GUIDE Wipe clean with a soft, damp cloth when needed.',
-      'Ready to hang, hooks provided in the package for easy installation.',
-      'Made by Local Artisans of India #MADE IN INDIA #',
-      'Wrapped in soft paper and packed with bubble wrap and card board box for reaching you safely.',
-    ],
+    FEATURE_DETAILS_LIST: []
   },
 } as const;
 
