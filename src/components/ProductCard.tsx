@@ -37,7 +37,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         {/* Product Image */}
         <div className="relative aspect-square overflow-hidden">
           <Image
-            src={product.imageUrl || '/api/placeholder/400/400'}
+            src={product.imageUrl?.[0] || '/api/placeholder/400/400'}
             alt={product.name}
             fill
             className="object-cover transition-transform duration-300 hover:scale-105"

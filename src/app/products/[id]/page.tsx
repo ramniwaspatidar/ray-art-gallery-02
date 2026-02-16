@@ -27,6 +27,7 @@ const ProductDetailsPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   useEffect(() => {
     if (!productId) return;
@@ -50,8 +51,8 @@ const ProductDetailsPage: React.FC = () => {
 
   const discountPercentage = useMemo(() => {
     if (!product?.originalPrice) return 0;
-    const price = parseFloat(product.price);
-    const original = parseFloat(product.originalPrice);
+    const price = typeof product.price === 'string' ? parseFloat(product.price) : product.price;
+    const original = typeof product.originalPrice === 'string' ? parseFloat(product.originalPrice) : (product.originalPrice as number);
     return Math.round(((original - price) / original) * 100);
   }, [product?.originalPrice, product?.price]);
 
@@ -60,17 +61,6 @@ const ProductDetailsPage: React.FC = () => {
     return INR_FORMATTER.format(p);
   }, []);
 
-  const handleAddToCart = useCallback(() => {
-    if (!product) return;
-    console.log('Add to cart:', { product, quantity });
-    toast.success(`Added "${product.name}" to cart!`);
-  }, [product, quantity]);
-
-  const handleBuyNow = useCallback(() => {
-    if (!product) return;
-    console.log('Buy now:', { product, quantity });
-    toast.success(`Proceeding to checkout for "${product.name}"`);
-  }, [product, quantity]);
 
   if (loading) {
     return (
@@ -132,36 +122,78 @@ const ProductDetailsPage: React.FC = () => {
     <div className="min-h-screen bg-white">
       <Header />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+      <main className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 lg:gap-8">
           {/* Product Image */}
-          <div>
-            <div className="relative w-full aspect-square overflow-hidden rounded-lg bg-gray-100">
-              <Image
-                src={product.imageUrl || '/api/placeholder/400/400'}
-                alt={product.name}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 66vw"
-                priority
-              />
+          {/* Product Image Gallery */}
+          <div className="flex gap-4">
+             {/* Thumbnails - visible on desktop, acting as side navigation */}
+             <div className="hidden lg:flex flex-col gap-4 w-24 shrink-0">
+                {product.imageUrl.map((img, index) => (
+                  <div 
+                    key={index}
+                    onClick={() => setSelectedImageIndex(index)}
+                    className={`
+                      relative w-24 h-24 rounded-lg overflow-hidden cursor-pointer border-2 transition-all
+                      ${selectedImageIndex === index ? 'border-teal-500 ring-2 ring-teal-500/30' : 'border-transparent hover:border-gray-300'}
+                    `}
+                  >
+                    <Image
+                      src={img}
+                      alt={`${product.name} - view ${index + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="96px"
+                    />
+                  </div>
+                ))}
+             </div>
 
-              {/* {discountPercentage > 0 && (
-                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 bg-teal-500 text-white px-2.5 py-1 rounded-md text-xs sm:text-sm font-bold uppercase tracking-wide shadow-lg">
-                  {UI_TEXT.PRODUCT_DETAILS.SALE}
+             {/* Main Image */}
+             <div className="flex-1">
+                <div className="relative w-full aspect-square overflow-hidden rounded-lg bg-gray-100 mb-6">
+                  <Image
+                    src={product.imageUrl[selectedImageIndex] || '/api/placeholder/600/600'}
+                    alt={product.name}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 75vw, 50vw"
+                    priority
+                  />
                 </div>
-              )} */}
-            </div>
+                 
+                {/* Mobile Thumbnails Row */}
+                <div className="lg:hidden flex gap-3 overflow-x-auto pb-4 mb-2 scrollbar-hide">
+                   {product.imageUrl.map((img, index) => (
+                    <div 
+                      key={index}
+                      onClick={() => setSelectedImageIndex(index)}
+                      className={`
+                        relative w-20 h-20 rounded-lg overflow-hidden cursor-pointer border-2 shrink-0 transition-all
+                        ${selectedImageIndex === index ? 'border-teal-500' : 'border-transparent'}
+                      `}
+                    >
+                      <Image
+                        src={img}
+                        alt={`${product.name} - view ${index + 1}`}
+                        fill
+                        className="object-cover"
+                        sizes="80px"
+                      />
+                    </div>
+                  ))}
+                </div>
 
-            {/* Description Below Image - visible on desktop only */}
-            <div className="hidden lg:block bg-white py-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                {UI_TEXT.PRODUCT_DETAILS.DESCRIPTION}
-              </h3>
-              <p className="text-gray-700 text-sm leading-relaxed">
-                {product.description}
-              </p>
-            </div>
+                {/* Description Below Image - desktop */}
+                <div className="hidden lg:block bg-white py-2">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    {UI_TEXT.PRODUCT_DETAILS.DESCRIPTION}
+                  </h3>
+                  <p className="text-gray-700 text-sm leading-relaxed">
+                    {product.description}
+                  </p>
+                </div>
+             </div>
           </div>
 
           {/* Product Details */}
@@ -206,7 +238,7 @@ const ProductDetailsPage: React.FC = () => {
 
               {/* Order on WhatsApp Button */}
               <a
-                href={`https://wa.me/919876543210?text=${encodeURIComponent(UI_TEXT.PRODUCT_DETAILS.WHATSAPP_MESSAGE)}`}
+                href={`https://wa.me/919319848309?text=${encodeURIComponent(UI_TEXT.PRODUCT_DETAILS.WHATSAPP_MESSAGE)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg flex items-center justify-center space-x-2 transition-colors"
