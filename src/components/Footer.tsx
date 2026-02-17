@@ -118,7 +118,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-3">
               <li>
                 <a
-                  href="https://wa.me/YOUR_PHONE_NUMBER"
+                  href="https://wa.me/9319848309"
                   className="text-gray-400 hover:text-teal-400 transition-colors flex items-center text-sm"
                   target="_blank"
                   rel="noopener noreferrer"
